@@ -52,7 +52,14 @@ export const DeployTokenSchema = z
   .object({
     name: z.string().describe("The name of the token"),
     symbol: z.string().describe("The token symbol"),
-    totalSupply: z.custom<bigint>().describe("The total supply of tokens to mint"),
+    totalSupply: z.custom<bigint>((val) => {
+      try {
+        BigInt(val);
+        return true;
+      } catch {
+        return false;
+      }
+    }, { type: "string" }).describe("The total supply of tokens to mint"),
   })
   .strip()
   .describe("Instructions for deploying a token");
@@ -72,7 +79,14 @@ export const RequestFaucetFundsSchema = z
  */
 export const TradeSchema = z
   .object({
-    amount: z.custom<bigint>().describe("The amount of the from asset to trade"),
+    amount: z.custom<bigint>((val) => {
+      try {
+        BigInt(val);
+        return true;
+      } catch {
+        return false;
+      }
+    }, { type: "string" }).describe("The amount of the from asset to trade"),
     fromAssetId: z.string().describe("The from asset ID to trade"),
     toAssetId: z.string().describe("The to asset ID to receive from the trade"),
   })
